@@ -22,13 +22,13 @@ knitr::opts_chunk$set(echo = TRUE,
                       cache = FALSE)
 ```
 
-This is a data analysis report about the air pollution in Belgrade with the explanation of the R code used. Data that will be used for the analysis comes from the stations, which are set up by an independent initiative [Vazduh Gradjanima](https://vazduhgradjanima.rs). To learn how to use R and develop a report like this visit [Data Challenge Platform](https://datachallengewithr.rbind.io) with learning material developed in partnership with [UNDP Serbia](http://www.rs.undp.org).
+This is a data analysis report about air pollution in Belgrade with an explanation of the R code used. Data that will be used for the analysis comes from the stations, which are set up by an independent initiative [Vazduh Gradjanima](https://vazduhgradjanima.rs). To learn how to use R and develop a report like this visit [Data Challenge Platform](https://datachallengewithr.rbind.io) with learning material developed in partnership with [UNDP Serbia](http://www.rs.undp.org).
 
-## Read and organising data
+## Reading and organising data
 
 We will start the analysis by uploading the necessary packages and data into R.
 
-If you have not got the packages used in the following code, you will need to uncomment the first few lines (delite the `#` symbol) in the code below.
+If you have not got the packages used in the following code, you will need to uncomment the first few lines (delete the `#` symbol) in the code below.
 
 ```{r}
 #install.packages("rmarkdown")
@@ -50,15 +50,15 @@ mydata <- read.csv('https://vazduhgradjanima.rs/files/data.csv',
                     stringsAsFactor = FALSE) 
 ```
 
-It is alwas a good idea to have a look at data you upload, before you start using it for your analysis.
+It is always a good idea to have a look at data you upload, before you start using it for your analysis.
 ```{r}
 # scan data
 glimpse(mydata)
 ```
 
-We can do with some tweaking, by removing a few variables and separating day from time and creating separate columns for latitude and longitude variables.
+We can do some tweaking, by removing a few variables and separating day from time and creating separate columns for latitude and longitude variables.
 ```{r}
-# remoce 2nd and the last column
+## remove 2nd and the last column
 mydata <- mydata[, -c(2, 11)]
 # separate date from time
 mydata <- separate(mydata, timestamp, c("date", "time"), sep = "T")
@@ -95,7 +95,7 @@ mydata_new <- mydata %>%
 
 ## Mapping the stations
 
-To see where the stations are allocated we will plot them on the Google maps. We will use the `leaflet` package to do this and create a sub data with only list of the stations and their positions.
+To see where the stations are allocated we will plot them on Google maps. We will use the `leaflet` package to do this and create a sub data with only a list of the stations and their positions.
 
 ```{r}
 # creating a dataframe with only names and lat & lng for each station
@@ -106,7 +106,7 @@ stations [, 2] <- as.numeric(as.character(stations[,2]))
 stations [, 3] <- as.numeric(as.character(stations[,3]))
 summary(stations)
 ```
-Once we have the subset data we can plot it using the `leaflet` package like below.
+Once we have the subset data we can plot it using the `leaflet` package as below.
 
 ```{r}
 library(leaflet)
@@ -127,7 +127,7 @@ stations %>%
              popup = ~paste("<b>", device_title)
   ) 
 ```
-We can notice a few stations outside of Belgrade. By clicking on their location points on the map, we can identify them and remove them from our data set, as we want to focus only on Belgrade's stations.
+Notice that there are a few stations outside of Belgrade. By clicking on their location points on the map, we can identify them and remove them from our data set, as we want to focus only on Belgrade's stations.
 
 ```{r}
 mydata_bg <- mydata %>%
@@ -161,14 +161,14 @@ stations %>%
              popup = ~paste("<b>", device_title)) 
 ```
 
-## Analysisng the readings
+## Analysing the readings
 
 In this section we will look through the readings and try to make some sense of it all.
-If you are not much familiar with the information collected by the stations, ie. about the pm particles you can check the following link:  <https://www.irceline.be/en/documentation/faq/what-is-pm10-and-pm2.5>.
+If you are not familiar with the information collected by the stations, ie. about the pm particles you can check the following link:  <https://www.irceline.be/en/documentation/faq/what-is-pm10-and-pm2.5>.
 
-### No reading per week days
+### Number of readings per week days
 
-Next chunk of code counts the number of readings per each week day, it shows it in a table and visualises it using the `ggplot2()` package.
+The next chunk of code counts the number of readings per each week day, it shows it in a table and visualises it using the `ggplot2()` package.
 
 ```{r}
 mydata_bg %>% 
@@ -218,7 +218,7 @@ mydata_bg %>%
   scale_fill_brewer(palette="Dark2") + 
   theme(legend.position="none") 
 ```
-Those two plots look very similar. It would be interesting to see the bars of the two plots next to each other.
+The previous two plots look very similar. It would be interesting to see the bars of the two plots next to each other.
 ```{r}
 mydata_new %>% 
   mutate(wday = wday(date, label = TRUE)) %>% 
@@ -235,7 +235,7 @@ mydata_new %>%
   theme(legend.position="bottom") 
 ```
 
-### Average concentration of the particles each month
+### Average concentration of particles each month
 
 ```{r}
 mydata_bg %>% 
@@ -247,7 +247,7 @@ mydata_bg %>%
 It would be better to have January showing after December, so we will reorder them.
 
 ```{r}
-#order monts Oct-Jan
+# order monts Oct-Jan
 mydata_bg %>% 
     mutate(mon = month(date, label = TRUE, abbr = TRUE)) %>% 
     mutate(mon = factor(mon, levels=c("Oct", "Nov", "Dec", "Jan"))) %>%
@@ -274,7 +274,7 @@ mydata_bg %>%
   theme(legend.position="bottom") 
 ```
 
-### Average concentration of the particles each hour
+### Average concentration of particles each hour
 ```{r}
 mydata_bg %>% 
   group_by(time) %>% 
@@ -298,11 +298,11 @@ mydata_bg %>%
 
 ## Pressure and Humidity vs pm10
 
-In this section we will try to investigate if the concentration of pm particles depen upon other factors such as pressure and humidity.
+In this section we will try to investigate if the concentration of pm particles depens upon other factors such as pressure and humidity.
 
 ### pm10 vs pressure
 
-To investigate the relationship between the air pressure and concentration of pm10 paricles we will create a scatterplot:
+To investigate the relationship between air pressure and concentration of pm10 particles we will create a scatterplot:
 
 ```{r}
 mydata_bg %>% 
@@ -325,11 +325,11 @@ mydata_bg %>%
         plot.title=element_text(hjust=0.5)) 
 ```
 
-The data is quite messy, with a number of very extreme readings, which is why we “chopped” the axis using the `xlim()` and the `ylim()` functions after checking the distributions of the two variables. This is a part of informal investigation of the possible relationship between `pm10` and `pressure`, and a more rigor procedure should be adopted which is out of the scope of this workshop.
+The data is quite messy, with a number of very extreme readings, which is why we “chopped” the axis using the `xlim()` and the `ylim()` functions after checking the distributions of the two variables. This is a part of informal investigation of the possible relationship between `pm10` and `pressure`, and a more rigorous procedure should be adopted which beyond the scope of this workshop.
 
 ### pm10 vs humidity
 
-We will adopt the same approach to investigate possible relationship between the humidity and the concentration of the pm10 particles.
+We will adopt the same approach to investigate a possible relationship between humidity and concentration of the pm10 particles.
 
 ```{r}
 mydata_bg %>% 
@@ -350,9 +350,9 @@ mydata_bg %>%
         plot.title=element_text(hjust=0.5))
 ```
 
-As a challenge try to use a scatterplot to investigate for a possible relationship between the concentration of the `p10` particles and the `temperature`.
+As a challenge try to use a scatterplot to investigate a possible relationship between the concentration of the `p10` particles and the `temperature`.
 
-**Happy R codding!!!** 😃🙌💜
+**Happy R coding!!!** 😃🙌💜
 
 
 
