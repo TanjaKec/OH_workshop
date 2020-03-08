@@ -7,7 +7,6 @@ output:
     theme: "yeti"
     toc: true
     toc_float: true
-    code_download: true
     df_print: kable
 ---
 
