@@ -179,7 +179,7 @@ mydata_bg %>%
 mydata_bg %>% 
   mutate(wday = wday(date, label = TRUE)) %>% 
   ggplot(aes(x = wday, fill = wday)) +
-  geom_bar() +
+  geom_bar(color = "black") +
   xlab("week days readings") + 
   scale_fill_brewer(palette = "Dark2") + 
   theme(legend.position = "none") 
@@ -214,7 +214,7 @@ mydata_bg %>%
   labs (title = "average value of pm10 per week days", 
         caption = "Data from: https://vazduhgradjanima.rs", 
         x = "week days", y = "average pm10") +
-  scale_fill_brewer(palette="Dark2") + 
+  scale_fill_brewer(palette="Accent") + 
   theme(legend.position="none") 
 ```
 The previous two plots look very similar. It would be interesting to see the bars of the two plots next to each other.
@@ -324,7 +324,7 @@ mydata_bg %>%
         plot.title=element_text(hjust=0.5)) 
 ```
 
-The data is quite messy, with a number of very extreme readings, which is why we “chopped” the axis using the `xlim()` and the `ylim()` functions after checking the distributions of the two variables. This is a part of informal investigation of the possible relationship between `pm10` and `pressure`, and a more rigorous procedure should be adopted which beyond the scope of this workshop.
+The data is quite messy, with a number of very extreme readings, which is why we “chopped” the axis using the `xlim()` and the `ylim()` functions after checking the distributions of the two variables. This is a part of informal investigation of the possible relationship between `pm10` and `pressure`, and a more rigorous procedure should be adopted which is beyond the scope of this workshop.
 
 ### pm10 vs humidity
 
